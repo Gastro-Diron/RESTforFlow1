@@ -33,7 +33,7 @@ public type InvalidEmailError record {|
     ErrorMsg body;
 |};
 
-service /flow1 on new http:Listener (9090){
+service /flow1 on new http:Listener (9000){
     resource function get users() returns UserEntry[] {
         return userTable.toArray();
     }
