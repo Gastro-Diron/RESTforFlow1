@@ -1,5 +1,5 @@
 import ballerina/http;
-import ballerina/log;
+//import ballerina/log;
 
 public type UserEntry record {|
     readonly string email;
@@ -26,16 +26,25 @@ public type ConflictingEmailsError record {|
 
 public type ErrorMsg record {|
     string errmsg;
-|}
+|};
+
+public type InvalidEmailError record {|
+    *http:NotFound;
+    ErrorMsg body;
+|};
 
 service /flow1 on new http:Listener (9090){
-    resource function post UserDetails (@http:Payload UserEntry[] userEntries) returns UserEntry[]|ConflictingEmailsError {
+    resource function get users() returns UserEntry[] {
+        return userTable.toArray();
+    }
+    
+    resource function post users (@http:Payload UserEntry[] userEntries) returns UserEntry[]|ConflictingEmailsError {
         string[] conflictingEmails = from UserEntry userEntry in userEntries where userTable.hasKey(userEntry.email) select userEntry.email;
 
-        if Conflictingemails.length() > 0 {
+        if conflictingEmails.length() > 0 {
             return {
                 body: {
-                    errmsg: string: 'join(" ", "Conflicting emails:", ...conflictingEmails)
+                    errmsg: string:'join(" ", "Conflicting emails:", ...conflictingEmails)
                 }
             };
         } else {
@@ -43,22 +52,16 @@ service /flow1 on new http:Listener (9090){
             return userEntries;
         }
     }
-}
 
-listener http:Listener serviceListner = new (9090);
-
-# A service representing a network-accessible API
-# bound to port `9090`.
-service / on new http:Listener(9090) {
-
-    # A resource for generating greetings
-    # + name - the input string name
-    # + return - string name with hello message or error
-    resource function get greeting(string name) returns string|error {
-        // Send a response back to the caller.
-        if name is "" {
-            return error("name should not be empty!");
+    resource function get users/[string email] () returns UserEntry | InvalidEmailError {
+        UserEntry? userEntry = userTable[email];
+        if userEntry is () {
+            return {
+                body: {
+                    errmsg: string `Invalid Email: ${email}`
+                }
+            };
         }
-        return "Hello, " + name;
+        return userEntry;
     }
 }
