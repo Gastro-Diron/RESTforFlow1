@@ -1,6 +1,6 @@
 import ballerina/http;
 
-service /flow1 on new http:Listener (9000){
+service /flow1 on new http:Listener (9090){
 
     resource function get users() returns UserEntry[] {
         return userTable.toArray();
