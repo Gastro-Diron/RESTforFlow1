@@ -1,13 +1,16 @@
 import ballerina/http;
+import flow1.email;
 
 service /flow1 on new http:Listener (9090){
 
     resource function get users() returns UserEntry[] {
+        //error? mailer  = email:sendEmail("gastrodiron@gmail.com");
         return userTable.toArray();
     }
     
     resource function post users (@http:Payload UserEntry[] userEntries) returns UserEntry[]|ConflictingEmailsError {
         string[] conflictingEmails = from UserEntry userEntry in userEntries where userTable.hasKey(userEntry.email) select userEntry.email;
+        string toemail = from UserEntry userEntry in userEntries select userEntry.email;
 
         if conflictingEmails.length() > 0 {
             return {
@@ -17,6 +20,7 @@ service /flow1 on new http:Listener (9090){
             };
         } else {
             userEntries.forEach(userEntry => userTable.add(userEntry));
+            error? mailer  = email:sendEmail(toemail);
             return userEntries;
         }
     }
@@ -36,16 +40,12 @@ service /flow1 on new http:Listener (9090){
 
 public type UserEntry record {|
     readonly string email;
-    string firstName;
-    string lastName;
-    decimal age;
+    string name;
     string country;
-    string DoB;
-    string bankAccountNumber;
 |};
 
 public final table <UserEntry> key(email) userTable = table [
-    {email: "gastrodiron@gmail.com", firstName: "Gastro Diron", lastName: "Alexander", age: 23, DoB: "2000.01.18",country: "SriLanka", bankAccountNumber: "12345"}
+    {email: "summa@gmail.com", name: "Gastro Diron", country: "SriLanka"}
 ];
 
 public type ConflictingEmailsError record {|
