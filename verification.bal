@@ -3,13 +3,11 @@ import ballerina/http;
 service / on new http:Listener (9091){
 
     resource function get verify() returns VerifyEntry[] {
-        //error? mailer  = email:sendEmail("gastrodiron@gmail.com");
         return verifyTable.toArray();
     }
     
-    resource function post verify (@http:Payload VerifyEntry[] userEntries) returns VerifyEntry[]|ConflictingEmailsError {
-        string[] conflictingEmails = from VerifyEntry verifyEntry in userEntries where userTable.hasKey(verifyEntry.email) select verifyEntry.email;
-        string toemail = from VerifyEntry verifyEntry in userEntries select verifyEntry.email;
+    resource function post verify (@http:Payload VerifyEntry[] verifyEntries) returns VerifyEntry[]|ConflictEmailsError {
+        string[] conflictingEmails = from VerifyEntry verifyEntry in verifyEntries where verifyTable.hasKey(verifyEntry.email) select verifyEntry.email;
 
         if conflictingEmails.length() > 0 {
             return {
@@ -18,12 +16,12 @@ service / on new http:Listener (9091){
                 }
             };
         } else {
-            userEntries.forEach(verifyEntry => verifyTable.add(verifyEntry));
-            return userEntries;
+            verifyEntries.forEach(verifyEntry => verifyTable.add(verifyEntry));
+            return verifyEntries;
         }
     }
 
-    resource function get verify/[string email] () returns VerifyEntry|InvalidEmailError {
+    resource function get verify/[string email] () returns VerifyEntry|InvalidMailError {
         VerifyEntry? verifyEntry = verifyTable[email];
         if verifyEntry is () {
             return {
@@ -53,16 +51,16 @@ public final table <VerifyEntry> key(email) verifyTable = table [];
 //     {email: "summa@gmail.com", name: "Gastro Diron", country: "SriLanka"}
 // ];
 
-// public type ConflictingEmailsError record {|
-//     *http:Conflict;
-//     ErrorMsg body;
-// |};
+public type ConflictEmailsError record {|
+    *http:Conflict;
+    ErrMsg body;
+|};
 
-// public type ErrorMsg record {|
-//     string errmsg;
-// |};
+public type ErrMsg record {|
+    string errmsg;
+|};
 
-// public type InvalidEmailError record {|
-//     *http:NotFound;
-//     ErrorMsg body;
-// |};
+public type InvalidMailError record {|
+    *http:NotFound;
+    ErrMsg body;
+|};
