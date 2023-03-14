@@ -2,7 +2,7 @@ import ballerina/http;
 
 service / on new http:Listener (9091){
 
-    resource function get verify() returns VerifyEntry[] {
+    resource function get verify() returns string[][]|error?|VerifyEntry[] {
         return verifyTable.toArray();
     }
     
@@ -21,7 +21,7 @@ service / on new http:Listener (9091){
         }
     }
 
-    resource function get verify/[string email] () returns string|InvalidEmailError|VerifyEntry? {
+    resource function get verify/[string email] () returns string|InvalidEmailError|VerifyEntry?|error {
         VerifyEntry? verifyEntry = verifyTable[email];
         if verifyEntry is () {
             return {
@@ -39,6 +39,20 @@ service / on new http:Listener (9091){
         //return verifyEntry;
     }
 }
+
+public type ConflictingEmailsError record {|
+    *http:Conflict;
+    ErrorMsg body;
+|};
+
+public type ErrorMsg record {|
+    string errmsg;
+|};
+
+public type InvalidEmailError record {|
+    *http:NotFound;
+    ErrorMsg body;
+|};
 
 public type VerifyEntry record {|
     readonly string email;
