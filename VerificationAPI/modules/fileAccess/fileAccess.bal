@@ -10,8 +10,6 @@ public function saveData (json content, string email) returns error? {
     return result;
 }
 
-
-
 // public function saveData (map<anydata>[] content) returns error? {
 //     io:Error? result = io:fileWriteCsv("/Users/gastro/Documents/Databases/Temporary/test.csv", content, "APPEND");
 //     return result;

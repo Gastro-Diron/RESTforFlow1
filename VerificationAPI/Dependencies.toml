@@ -49,6 +49,20 @@ dependencies = [
 
 [[package]]
 org = "ballerina"
+name = "email"
+version = "2.5.2"
+dependencies = [
+	{org = "ballerina", name = "jballerina.java"},
+	{org = "ballerina", name = "log"},
+	{org = "ballerina", name = "mime"},
+	{org = "ballerina", name = "task"}
+]
+modules = [
+	{org = "ballerina", packageName = "email", moduleName = "email"}
+]
+
+[[package]]
+org = "ballerina"
 name = "file"
 version = "1.5.0"
 dependencies = [
@@ -98,6 +112,9 @@ version = "1.3.1"
 dependencies = [
 	{org = "ballerina", name = "jballerina.java"},
 	{org = "ballerina", name = "lang.value"}
+]
+modules = [
+	{org = "ballerina", packageName = "io", moduleName = "io"}
 ]
 
 [[package]]
@@ -244,6 +261,18 @@ dependencies = [
 
 [[package]]
 org = "ballerina"
+name = "random"
+version = "1.3.1"
+dependencies = [
+	{org = "ballerina", name = "jballerina.java"},
+	{org = "ballerina", name = "time"}
+]
+modules = [
+	{org = "ballerina", packageName = "random", moduleName = "random"}
+]
+
+[[package]]
+org = "ballerina"
 name = "regex"
 version = "1.3.2"
 dependencies = [
@@ -293,11 +322,17 @@ org = "gastro"
 name = "VerificationAPI"
 version = "0.1.0"
 dependencies = [
+	{org = "ballerina", name = "email"},
 	{org = "ballerina", name = "http"},
+	{org = "ballerina", name = "io"},
+	{org = "ballerina", name = "random"},
 	{org = "ballerinai", name = "observe"}
 ]
 modules = [
-	{org = "gastro", packageName = "VerificationAPI", moduleName = "VerificationAPI"}
+	{org = "gastro", packageName = "VerificationAPI", moduleName = "VerificationAPI"},
+	{org = "gastro", packageName = "VerificationAPI", moduleName = "VerificationAPI.codeGen"},
+	{org = "gastro", packageName = "VerificationAPI", moduleName = "VerificationAPI.email"},
+	{org = "gastro", packageName = "VerificationAPI", moduleName = "VerificationAPI.fileAccess"}
 ]
 
 
