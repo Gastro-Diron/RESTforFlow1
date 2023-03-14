@@ -1,7 +1,7 @@
 import ballerina/http;
 import flow1.email;
 import flow1.filewrite;
-import flow1.codegen;
+//import flow1.codegen;
 
 service /flow1 on new http:Listener (9090){
 
@@ -21,7 +21,7 @@ service /flow1 on new http:Listener (9090){
             };
         } else {
             userEntries.forEach(userEntry => userTable.add(userEntry));
-            int|error? code = codegen:genCode();
+            //string|error? code = codegen:genCode();
             error? data = filewrite:saveData(userEntries);
             error? mailer  = email:sendEmail(toemail);
             return userEntries;
