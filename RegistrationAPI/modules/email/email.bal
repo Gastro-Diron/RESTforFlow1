@@ -1,8 +1,11 @@
 import ballerina/email;
+// import ballerina/random;
 
+// int randomInteger = check random:createIntInRange(1000, 9999);
+// string verificationCode = randomInteger.toString();
 string verificationCode = "1234";
 
-public function sendEmail(string toemail) returns error? {
+public function sendEmail(string toemail) returns string|error {
     email:SmtpClient smtpClient = check new ("smtp.gmail.com", "gastrodironalexander@gmail.com" , "jmsrwgdnaewcfvoj");
     email:Message email = {
         to: [toemail],
@@ -12,4 +15,5 @@ public function sendEmail(string toemail) returns error? {
         'from: "gastrodironalexander@gmail.com"
     };
     check smtpClient->sendMessage(email);
+    return verificationCode;
 }
