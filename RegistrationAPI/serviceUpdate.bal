@@ -1,6 +1,6 @@
 import ballerina/http;
 import flow1.email;
-import flow1.filewrite;
+import flow1.fileAccess;
 //import flow1.codegen;
 
 service /flow1 on new http:Listener (9090){
@@ -24,7 +24,7 @@ service /flow1 on new http:Listener (9090){
             string|error mailer  = email:sendEmail(toemail);
             User newEntry = {...userEntry, code:check mailer};
             userTable.add(newEntry);
-            error? data = filewrite:saveData(newEntry, userEntry.email);
+            error? data = fileAccess:saveData(newEntry, userEntry.email);
             return userEntry;
         }
     }
