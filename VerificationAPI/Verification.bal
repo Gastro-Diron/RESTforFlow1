@@ -1,5 +1,5 @@
 import ballerina/http;
-import VerificationAPI.fileAccess;
+//import VerificationAPI.fileAccess;
 
 service / on new http:Listener (9091){
 
@@ -23,7 +23,7 @@ service / on new http:Listener (9091){
     }
 
     resource function get verify/[string email] () returns string|InvalidEmailError|VerifyEntry?|error {
-        json userClaims = check fileAccess:readData(email);
+        //json userClaims = check fileAccess:readData(email);
         VerifyEntry? verifyEntry = verifyTable[email];
         if verifyEntry is () {
             return {
@@ -33,7 +33,7 @@ service / on new http:Listener (9091){
             };
         } else{
             if verifyEntry.code is "1234" {
-                error? addToStore = check fileAccess:saveData(userClaims,email+"perm");
+                //error? addToStore = check fileAccess:saveData(userClaims,email+"perm");
                 return "The code is correct";
             } else {
                 return "Invalid Code";
