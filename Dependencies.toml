@@ -330,8 +330,9 @@ dependencies = [
 ]
 modules = [
 	{org = "orgwso2", packageName = "flow1", moduleName = "flow1"},
+	{org = "orgwso2", packageName = "flow1", moduleName = "flow1.codegen"},
 	{org = "orgwso2", packageName = "flow1", moduleName = "flow1.email"},
-	{org = "orgwso2", packageName = "flow1", moduleName = "flow1.fileWrite"}
+	{org = "orgwso2", packageName = "flow1", moduleName = "flow1.filewrite"}
 ]
 
 

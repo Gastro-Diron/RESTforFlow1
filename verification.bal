@@ -32,9 +32,11 @@ service / on new http:Listener (9091){
         } else{
             if verifyEntry.code is "1234" {
                 return "The code is correct";
+            } else {
+                return "Invalid Code";
+            }
         }
-        }
-        return verifyEntry;
+        //return verifyEntry;
     }
 }
 
